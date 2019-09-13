@@ -1,0 +1,7 @@
+{
+  "Id": "SkipIntro",
+  "DisplayName": "SkipIntro",
+  "Version": "1.1.1",
+
+  "EntryMethod": "SkipIntro.Main.Load"
+}

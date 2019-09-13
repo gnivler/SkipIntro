@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using DG.Tweening;
 using UnityModManagerNet;
 using Harmony12;
 using Kingmaker;
 using Kingmaker.UI.MainMenuUI;
 using static SkipIntro.Main;
 
+// ReSharper disable UnusedMember.Local
 // ReSharper disable InconsistentNaming
+
 namespace SkipIntro
 {
     internal static class Main
@@ -23,6 +24,7 @@ namespace SkipIntro
             return true;
         }
 
+        // ReSharper disable once NotAccessedField.Local
         private static bool enabled;
 
         static void Load(UnityModManager.ModEntry mod_entry)
@@ -46,9 +48,7 @@ namespace SkipIntro
         public class SplashScreenController_Start_Patch
         {
             public static void Prefix(List<SplashScreenController.ScreenUnit> ___m_Screens)
-            {
-                ___m_Screens.Clear();
-            }
+                => ___m_Screens.Clear();
         }
 
         // makes the menu book appear in full right away, as at the end of its natural animation
@@ -71,9 +71,7 @@ namespace SkipIntro
         private static class MainMenuAnimationsControllerUpdatePatch
         {
             private static void Postfix(MainMenuAnimationsController __instance)
-            {
-                __instance.FadeOutAnimator.Update(float.MaxValue);
-            }
+                => __instance.FadeOutAnimator.Update(float.MaxValue);
         }
     }
 
@@ -106,9 +104,9 @@ namespace SkipIntro
         }
 
         // removes 0.5 second wait on progress bar disappearing
-        public static IEnumerable<CodeInstruction> StartGameCoroutine_Transpiler(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> StartGameCoroutine_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> codes = new List<CodeInstruction>();
+            var codes = new List<CodeInstruction>();
             try
             {
                 codes = instructions.ToList();
@@ -124,10 +122,9 @@ namespace SkipIntro
         }
 
         // removes the fade out of the logo after loading is complete
-        public static IEnumerable<CodeInstruction> Show_Transpiler(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> Show_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = instructions.ToList();
-
             var index = codes.FindIndex(x => x.operand != null && x.operand.ToString().Contains("m_LogoHideDelay"));
             codes[index - 1].opcode = OpCodes.Nop;
             codes[index].opcode = OpCodes.Ldc_R4;
